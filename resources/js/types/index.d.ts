@@ -3,9 +3,13 @@ import { ForwardRefExoticComponent, ReactNode, RefAttributes } from "react";
 
 export interface User {
     id: number;
-    name: string;
+    first_name: string;
+    last_name: string;
     email: string;
     email_verified_at: string;
+    theme_preference: string;
+    phone: string;
+    date_of_birth: string;
 }
 
 export type PageProps<
