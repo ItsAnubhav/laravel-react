@@ -7,22 +7,23 @@ import {
   LifeBuoy,
   Send,
   SquareTerminal,
+  Users,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem, SidebarRail,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem, SidebarRail,
 } from "@/components/ui/sidebar"
-import {Link, usePage} from "@inertiajs/react";
-import {PageProps} from "@/types";
+import { Link, usePage } from "@inertiajs/react";
+import { PageProps } from "@/types";
 
 const data = {
   user: {
@@ -37,6 +38,11 @@ const data = {
       icon: Home,
     },
     {
+      title: "Users",
+      url: "/users",
+      icon: Users,
+    },
+    {
       title: "Projects",
       url: "#",
       icon: SquareTerminal,
@@ -48,11 +54,11 @@ const data = {
         },
       ],
     },
-  {
+    {
       title: "Design Engineering",
       url: "#",
       icon: Frame,
-  },
+    },
   ],
   navSecondary: [
     {
@@ -69,9 +75,9 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const { auth } = usePage<PageProps>().props;
+  const { auth } = usePage<PageProps>().props;
 
-    return (
+  return (
     <Sidebar variant="sidebar" collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
@@ -97,7 +103,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <NavUser user={auth.user} />
       </SidebarFooter>
-        <SidebarRail />
+      <SidebarRail />
     </Sidebar>
   )
 }
