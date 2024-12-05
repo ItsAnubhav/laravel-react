@@ -30,10 +30,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -59,7 +56,17 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+        $user->title = $request->title;
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->date_of_birth = $request->date_of_birth;
+        $user->phone = $request->phone_number;
+        $user->theme_preference = $request->theme_preference;
+        $user->save();
+        dd($user);
+        return redirect()->route('users.index');
     }
 
     /**
@@ -67,6 +74,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->route('users.index');
     }
 }

@@ -1,17 +1,13 @@
 import {
     ColumnDef,
 } from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
-
+import { BadgeCheck, DeleteIcon, EditIcon, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import AuthenticatedLayout from "@/layouts/authenticated-layout";
@@ -19,10 +15,9 @@ import AuthenticatedLayout from "@/layouts/authenticated-layout";
 import { User } from "@/types"
 import { DataTableColumnHeader } from "@/components/shared/data-table-column-header"
 import { DataTable } from "@/components/app-datatable"
-import { Head } from "@inertiajs/react"
+import { Head, Link } from "@inertiajs/react"
 
 // Define the columns
-
 export const columns: ColumnDef<User>[] = [
     {
         id: "select",
@@ -77,7 +72,7 @@ export const columns: ColumnDef<User>[] = [
         enableHiding: false,
         header: "Actions",
         cell: ({ row }) => {
-            const payment = row.original
+            const rowData = row.original
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -87,15 +82,13 @@ export const columns: ColumnDef<User>[] = [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText("Test")}
-                        >
-                            Copy payment ID
+                        <DropdownMenuItem>
+                            <Link href={route('users.edit', rowData.id)}>
+                                <EditIcon />
+                                Edit Profile
+                            </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
+
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
@@ -110,7 +103,7 @@ export default function Index(
         <AuthenticatedLayout header={'Users'} >
             <Head title="Users" />
             <div className="p-4">
-                <h1 className="text-xl font-bold mb-4">User Data Table</h1>
+                <h1 className="text-xl font-bold mb-4">Users</h1>
                 <DataTable columns={columns} data={users} />
             </div>
         </AuthenticatedLayout>
