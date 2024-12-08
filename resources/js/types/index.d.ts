@@ -10,6 +10,7 @@ export interface User {
     theme_preference: string;
     phone: string;
     date_of_birth: string;
+    status: string;
 }
 
 export type PageProps<

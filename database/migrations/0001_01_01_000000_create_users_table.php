@@ -24,6 +24,7 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->string('country_code')->nullable();
             $table->enum('theme_preference', ['light', 'dark'])->default('light');
+            $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
             $table->rememberToken();
             $table->timestamps();
         });

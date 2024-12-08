@@ -8,10 +8,14 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import AuthenticatedLayout from "@/layouts/authenticated-layout";
-
+import moment from "moment"
 import { User } from "@/types"
 import { DataTableColumnHeader } from "@/components/shared/data-table-column-header"
 import { DataTable } from "@/components/app-datatable"
@@ -59,13 +63,45 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
     },
     {
+        accessorKey: "status",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="Status" />
+            )
+        },
+        cell: ({ row }) => {
+            const user = row.original
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline">{user.status}</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>User Status</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuRadioGroup value={user.status} onValueChange={(value) => onStatusChange(value, user)}>
+                        <DropdownMenuRadioItem value="active">Active</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="inactive">Inactive</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="suspended">Suspended</DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                // <BadgeCheck
+                //     className={`h-4 w-4 mr-2 ${
+                //         user.status === "active" ? "text-green-500" : "text-red-500"
+                //     }`}
+                // />
+            )
+        },
+    },
+    {
         accessorKey: "date_of_birth",
         header: ({ column }) => {
             return (
                 <DataTableColumnHeader column={column} title="DOB" />
             )
         },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("date_of_birth")}</div>,
+        cell: ({ row }) => <div>{moment(row.getValue("date_of_birth")).format('ll') }</div>,
     },
     {
         id: "actions",
@@ -96,6 +132,10 @@ export const columns: ColumnDef<User>[] = [
     },
 ];
 
+function onStatusChange(status: string, user: User) {
+    console.log(status, user)
+}
+
 export default function Index(
     { users }: { users: User[] }
 ) {
@@ -109,3 +149,4 @@ export default function Index(
         </AuthenticatedLayout>
     )
 }
+

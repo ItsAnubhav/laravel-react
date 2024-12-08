@@ -22,9 +22,23 @@ class DatabaseSeeder extends Seeder
                 'guard_name' => 'web'
             ]);
         }
+        //create admin
+        User::create([
+            'first_name' => 'Admin',
+            'last_name' => 'User',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
+            'status' => 'active',
+            'theme_preference' => 'light',
+            'gender' => 'male',
+            'phone' => '1234567890',
+            'date_of_birth' => '1990-01-01',
+            'country_code' => 'US'
+        ]);
 
         //create users
-        User::factory(100)->create();
+        User::factory(99)->create();
 
         //assign roles
         $users = User::all();
