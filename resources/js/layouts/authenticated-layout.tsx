@@ -1,20 +1,17 @@
 import { PropsWithChildren, ReactNode } from "react";
-import {AppSidebar} from "@/components/app-sidebar";
-import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
-import {Separator} from "@/components/ui/separator";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 import {
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbList, BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import AppearanceDropdown from "@/components/appearance-dropdown";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
-import {Button} from "@/components/ui/button";
-import {Moon, Sun} from "lucide-react";
-import {DropdownMenuItem} from "@radix-ui/react-dropdown-menu";
-import {useTheme} from "next-themes";
-import {usePage} from "@inertiajs/react";
-import {PageProps} from "@/types";
+import { useTheme } from "next-themes";
+import { usePage } from "@inertiajs/react";
+import { PageProps } from "@/types";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function AuthenticatedLayout({
     header,
@@ -54,6 +51,7 @@ export default function AuthenticatedLayout({
                     {children}
                 </main>
             </SidebarInset>
+            <Toaster />
         </SidebarProvider>
     );
 }

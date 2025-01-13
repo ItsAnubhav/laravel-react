@@ -1,5 +1,5 @@
 import { Table } from "@tanstack/react-table"
-import { X } from "lucide-react"
+import { Check, CheckCheck, PanelTopInactive, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -7,6 +7,7 @@ import { DataTableViewOptions } from "./data-table-view-options"
 
 // import { priorities, statuses } from "../data/data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
+import {statuses, userTypes} from "@/pages/users/data/userdata";
 
 interface DataTableToolbarProps<TData> {
     searchTitle?: string
@@ -25,26 +26,27 @@ export function DataTableToolbar<TData>({
             <div className="flex flex-1 items-center space-x-2">
                 <Input
                     placeholder={searchTitle}
-                    value={(table.getColumn("first_name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("first_name")?.setFilterValue(event.target.value)
+                    value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) => {
+                        table.getColumn("fullName")?.setFilterValue(event.target.value)
+                    }
                     }
                     className="h-8 w-[150px] lg:w-[250px]"
                 />
-                {/* {table.getColumn("status") && (
+                {table.getColumn("status") && (
                     <DataTableFacetedFilter
                         column={table.getColumn("status")}
                         title="Status"
                         options={statuses}
                     />
                 )}
-                {table.getColumn("priority") && (
+                {table.getColumn("role") && (
                     <DataTableFacetedFilter
-                        column={table.getColumn("priority")}
-                        title="Priority"
-                        options={facetedFilters}
+                        column={table.getColumn("role")}
+                        title="Role"
+                        options={userTypes}
                     />
-                )} */}
+                )}
                 {isFiltered && (
                     <Button
                         variant="ghost"

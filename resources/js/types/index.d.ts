@@ -11,6 +11,7 @@ export interface User {
     phone: string;
     date_of_birth: string;
     status: string;
+    role: string;
 }
 
 export type PageProps<
@@ -25,17 +26,17 @@ export type MenuItemProp = {
     title: string;
     href: string;
     icon?:
-        | ForwardRefExoticComponent<
-              Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-          >
-        | ReactNode;
+    | ForwardRefExoticComponent<
+        Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+    >
+    | ReactNode;
     variant:
-        | "link"
-        | "default"
-        | "ghost"
-        | "destructive"
-        | "outline"
-        | "secondary"
-        | null
-        | undefined;
+    | "link"
+    | "default"
+    | "ghost"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | null
+    | undefined;
 };

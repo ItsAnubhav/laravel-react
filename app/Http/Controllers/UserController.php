@@ -14,6 +14,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        //dd($users);
         return Inertia::render('users/index', [
             'users' => $users,
         ]);
@@ -46,6 +47,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::find($id);
+
         return Inertia::render('users/edit', [
             'user' => $user,
         ]);
@@ -65,7 +67,7 @@ class UserController extends Controller
         $user->phone = $request->phone_number;
         $user->theme_preference = $request->theme_preference;
         $user->save();
-        dd($user);
+//        dd($user);
         return redirect()->route('users.index');
     }
 

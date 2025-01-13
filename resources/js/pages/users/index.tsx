@@ -1,152 +1,193 @@
 import {
-    ColumnDef,
+    ColumnDef, FilterFn,
 } from "@tanstack/react-table"
-import { BadgeCheck, DeleteIcon, EditIcon, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import AuthenticatedLayout from "@/layouts/authenticated-layout";
-import moment from "moment"
 import { User } from "@/types"
 import { DataTableColumnHeader } from "@/components/shared/data-table-column-header"
 import { DataTable } from "@/components/app-datatable"
-import { Head, Link } from "@inertiajs/react"
+import { IconDropdown, IconRight } from "react-day-picker"
+import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
+import { DataTableRowActions } from "@/components/datatables/data-table-row-actions"
+import UsersProvider, { useUsers } from "./users-context";
+import LongText from "@/components/long-text";
+import { userTypes } from "./data/userdata";
+import {CirclePlus, Import} from "lucide-react";
 
-// Define the columns
+// Custom filter function for multi-column searching
+const multiColumnFilterFn: FilterFn<User> = (row, columnId, filterValue) => {
+    const searchableRowContent = `${row.original.first_name} ${row.original.last_name} ${row.original.email} ${row.original.phone}`;
+    return searchableRowContent.toLowerCase().includes(filterValue.toLowerCase());
+};
 export const columns: ColumnDef<User>[] = [
     {
-        id: "select",
+        id: 'select',
         header: ({ table }) => (
             <Checkbox
                 checked={
                     table.getIsAllPageRowsSelected() ||
-                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                    (table.getIsSomePageRowsSelected() && 'indeterminate')
                 }
                 onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                aria-label="Select all"
+                aria-label='Select all'
+                className='translate-y-[2px]'
             />
         ),
+        meta: {
+            className: cn(
+                'sticky md:table-cell left-0 z-10 rounded-tl',
+                'bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted'
+            ),
+        },
         cell: ({ row }) => (
             <Checkbox
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
+                aria-label='Select row'
+                className='translate-y-[2px]'
             />
         ),
         enableSorting: false,
         enableHiding: false,
     },
     {
-        accessorKey: "first_name",
-        header: "Name",
+        id: 'fullName',
+        accessorKey: 'fullName',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title='Name' />
+        ),
         cell: ({ row }) => {
-            const user = row.original
-            return (<div className="capitalize">{user.first_name} {user.last_name}</div>)
+            const firstName = row.original.first_name;
+            const lastName = row.original.last_name;
+            const fullName = `${firstName} ${lastName}`
+            return <LongText className='max-w-36'>{fullName}</LongText>
         },
+        meta: { className: 'w-36' },
+        filterFn: multiColumnFilterFn
     },
     {
-        accessorKey: "email",
-        header: ({ column }) => {
-            return (
-                <DataTableColumnHeader column={column} title="Email" />
-            )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+        accessorKey: 'email',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title='Email' />
+        ),
+        cell: ({ row }) => (
+            <div className='w-fit text-nowrap'>{row.getValue('email')}</div>
+        ),
     },
     {
-        accessorKey: "status",
-        header: ({ column }) => {
-            return (
-                <DataTableColumnHeader column={column} title="Status" />
-            )
-        },
+        accessorKey: 'phoneNumber',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title='Phone Number' />
+        ),
         cell: ({ row }) => {
-            const user = row.original
+            // console.log(row.original)
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline">{user.status}</Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        <DropdownMenuLabel>User Status</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuRadioGroup value={user.status} onValueChange={(value) => onStatusChange(value, user)}>
-                        <DropdownMenuRadioItem value="active">Active</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="inactive">Inactive</DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="suspended">Suspended</DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                // <BadgeCheck
-                //     className={`h-4 w-4 mr-2 ${
-                //         user.status === "active" ? "text-green-500" : "text-red-500"
-                //     }`}
-                // />
+                <div>{row.original.phone}</div>
             )
         },
+        enableSorting: false,
     },
     {
-        accessorKey: "date_of_birth",
-        header: ({ column }) => {
+        accessorKey: 'status',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title='Status' />
+        ),
+        cell: ({ row }) => {
+            const status = row.original.status
+
             return (
-                <DataTableColumnHeader column={column} title="DOB" />
+                <div className='flex space-x-2'>
+                    <Badge variant='outline' className={cn('capitalize')}>
+                        {status}
+                    </Badge>
+                </div>
             )
         },
-        cell: ({ row }) => <div>{moment(row.getValue("date_of_birth")).format('ll') }</div>,
-    },
-    {
-        id: "actions",
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id))
+        },
         enableHiding: false,
-        header: "Actions",
+        enableSorting: false,
+    },
+    {
+        accessorKey: 'role',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title='Role' />
+        ),
         cell: ({ row }) => {
-            const rowData = row.original
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                            <Link href={route('users.edit', rowData.id)}>
-                                <EditIcon />
-                                Edit Profile
-                            </Link>
-                        </DropdownMenuItem>
+            const role = row.original.role
+            const userType = userTypes.find(({ value }) => value === role)
 
-                    </DropdownMenuContent>
-                </DropdownMenu>
+            if (!userType) {
+                return null
+            }
+
+            return (
+                <div className='flex gap-x-2 items-center'>
+                    {userType.icon && (
+                        <userType.icon size={16} className='text-muted-foreground' />
+                    )}
+                    <span className='capitalize text-sm'>{row.getValue('role')}</span>
+                </div>
             )
         },
+        filterFn: (row, id, value) => {
+            return value.includes(row.getValue(id))
+        },
+        enableSorting: false,
+        enableHiding: false,
     },
-];
-
-function onStatusChange(status: string, user: User) {
-    console.log(status, user)
-}
+    {
+        id: 'actions',
+        cell: DataTableRowActions,
+    },
+]
 
 export default function Index(
     { users }: { users: User[] }
 ) {
+
     return (
         <AuthenticatedLayout header={'Users'} >
-            <Head title="Users" />
-            <div className="p-4">
-                <h1 className="text-xl font-bold mb-4">Users</h1>
-                <DataTable columns={columns} data={users} />
-            </div>
+            <UsersProvider>
+                <IndexPage users={users}  />
+            </UsersProvider>
         </AuthenticatedLayout>
+    )
+}
+
+export function IndexPage(
+    { users }: { users: User[] }
+) {
+    const { setOpen } = useUsers()
+    return (
+        <>
+            <div className='mb-2 flex items-center justify-between space-y-2 flex-wrap gap-x-4'>
+                <div>
+                    <h2 className='text-2xl font-bold tracking-tight'>Users</h2>
+                    <p className='text-muted-foreground'>
+                        Manage users in your organization
+                    </p>
+                </div>
+                <div className='flex gap-2'>
+                    <Button
+                        variant='outline'
+                        className='space-x-1'
+                        onClick={() => setOpen('import')}
+                    >
+                        <span>Import</span> <Import />
+                    </Button>
+                    <Button className='space-x-1'
+                        onClick={() => setOpen('add')}
+                    >
+                        <span>Create</span> <CirclePlus />
+                    </Button>
+                </div>
+            </div>
+            <DataTable columns={columns} data={users} />
+        </>
     )
 }
 

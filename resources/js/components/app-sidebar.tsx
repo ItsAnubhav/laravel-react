@@ -3,10 +3,14 @@
 import * as React from "react"
 import {
   Command,
+  CreditCard,
+  EarthIcon,
   Frame, Home,
   LifeBuoy,
+  Scroll,
   Send,
   SquareTerminal,
+  Store,
   Users,
 } from "lucide-react"
 
@@ -41,6 +45,26 @@ const data = {
       title: "Users",
       url: "/users",
       icon: Users,
+    },
+    {
+      title: "Payment Gateways",
+      url: "/users",
+      icon: CreditCard,
+    },
+    {
+      title: "Store Category",
+      url: "/users",
+      icon: Store,
+    },
+    {
+      title: "Transaction logs",
+      url: "/users",
+      icon: Scroll,
+    },
+    {
+      title: "Countries",
+      url: "/users",
+      icon: EarthIcon,
     },
     {
       title: "Projects",

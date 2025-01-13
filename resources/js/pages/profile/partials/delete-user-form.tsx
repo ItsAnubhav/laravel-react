@@ -104,7 +104,6 @@ export default function DeleteUserForm({
 
                             <AlertDialogAction
                                 type={"submit"}
-                                variant={"destructive"}
                                 disabled={processing}
                             >
                                 Delete Account

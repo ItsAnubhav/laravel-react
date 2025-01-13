@@ -30,6 +30,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'status'
     ];
 
+    protected $appends = ['role'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -51,5 +53,13 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the role of the user.
+     */
+    public function getRoleAttribute() : ?string
+    {
+        return $this->roles->isNotEmpty() ? $this->roles->last()->name : null;
     }
 }
