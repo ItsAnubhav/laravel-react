@@ -33,7 +33,8 @@ import {
     Calendar
 } from "@/components/ui/calendar"
 import {
-    Calendar as CalendarIcon
+    Calendar as CalendarIcon,
+    SaveAll
 } from "lucide-react"
 import {
     Select,
@@ -96,7 +97,7 @@ export default function MyForm(
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12 max-w-3xl py-10">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 max-w-3xl py-10">
                             <div className="grid grid-cols-12 gap-4">
                                 <div className="col-span-6">
                                     <FormField
@@ -111,7 +112,6 @@ export default function MyForm(
                                                         type=""
                                                         {...field} />
                                                 </FormControl>
-                                                <FormDescription>This is your public display name.</FormDescription>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -119,7 +119,6 @@ export default function MyForm(
                                 </div>
 
                                 <div className="col-span-6">
-
                                     <FormField
                                         control={form.control}
                                         name="last_name"
@@ -155,7 +154,7 @@ export default function MyForm(
                                                 defaultCountry="TR"
                                             />
                                         </FormControl>
-                                        <FormDescription>Enter your phone number.</FormDescription>
+
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -175,7 +174,7 @@ export default function MyForm(
                                                 type="email"
                                                 {...field} />
                                         </FormControl>
-                                        <FormDescription>This is your public display name.</FormDescription>
+
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -215,7 +214,6 @@ export default function MyForm(
                                                 />
                                             </PopoverContent>
                                         </Popover>
-                                        <FormDescription>Your date of birth is used to calculate your age.</FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -239,12 +237,14 @@ export default function MyForm(
                                                 <SelectItem value="system">System</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <FormDescription>Default theme preference</FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit">Submit</Button>
+                            <div className='flex gap-2'>
+                                <Button variant="outline"> Cancel</Button>
+                                <Button className='space-x-1' type="submit"> <SaveAll /> Submit</Button>
+                            </div>
                         </form>
                     </Form>
                 </CardContent>

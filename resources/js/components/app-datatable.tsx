@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/table"
 import { DataTableToolbar } from "./shared/data-table-toolbar"
 import { DataTablePagination } from "./shared/data-table-pagination"
+import DataTableProvider, { useDataTable } from "./datatables/datatable-context"
+import { set } from "date-fns"
 
 
 interface DataTableProps<TData, TValue> {
@@ -64,10 +66,15 @@ export function DataTable<TData, TValue>({
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
     })
-
+    const { setOpen, setCurrentRow, setSelectedRows } = useDataTable()
     return (
         <div className="space-y-4">
-            <DataTableToolbar table={table} />
+            <DataTableToolbar onBulkDelete={(ids) => {
+                setSelectedRows(ids)
+                setOpen('bulk-delete')
+                console.log(ids)
+
+            }} table={table} />
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>

@@ -10,17 +10,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { User } from '@/types'
-
-import {IconEdit, IconTrash} from "@tabler/icons-react";
-import {router} from "@inertiajs/react";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { router } from "@inertiajs/react";
+import { useDataTable } from './datatable-context'
 
 
 interface DataTableRowActionsProps {
   row: Row<User>
+  onDelete: (id: number) => void
+  onEdit: (id: number) => void
 }
 
-export function DataTableRowActions({ row }: DataTableRowActionsProps) {
-  // const { setOpen, setCurrentRow } = useUsers()
+export function DataTableRowActions({ row, onDelete, onEdit }: DataTableRowActionsProps) {
+  const { setOpen, setCurrentRow } = useDataTable()
   return (
     <>
       <DropdownMenu modal={false}>
@@ -36,7 +38,8 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         <DropdownMenuContent align='end' className='w-[160px]'>
           <DropdownMenuItem
             onClick={() => {
-                router.get(route('users.edit', row.original.id))
+              router.get(route('users.edit', row.original.id))
+              //onEdit(row.original.id)
             }}
           >
             Edit
@@ -47,14 +50,15 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
-                //reditect to delete page
+              //reditect to delete page
 
+              onDelete(row.original.id)
             }}
             className='!text-red-500'
           >
             Delete
             <DropdownMenuShortcut>
-               <IconTrash size={16} />
+              <IconTrash size={16} />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>

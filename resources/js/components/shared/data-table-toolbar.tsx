@@ -1,4 +1,4 @@
-import { Table } from "@tanstack/react-table"
+import { Row, Table } from "@tanstack/react-table"
 import { Check, CheckCheck, PanelTopInactive, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -7,19 +7,22 @@ import { DataTableViewOptions } from "./data-table-view-options"
 
 // import { priorities, statuses } from "../data/data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
-import {statuses, userTypes} from "@/pages/users/data/userdata";
+import { statuses, userTypes } from "@/pages/users/data/userdata";
 
 interface DataTableToolbarProps<TData> {
     searchTitle?: string
     table: Table<TData>
+    onBulkDelete?: (ids: Row<TData>[]) => void
 }
 
 export function DataTableToolbar<TData>({
     searchTitle = "Search here...",
     table,
+    onBulkDelete
 
 }: DataTableToolbarProps<TData>) {
     const isFiltered = table.getState().columnFilters.length > 0
+    const selectedRows = table.getSelectedRowModel().rows
 
     return (
         <div className="flex items-center justify-between">
@@ -56,6 +59,9 @@ export function DataTableToolbar<TData>({
                         Reset
                         <X />
                     </Button>
+                )}
+                {selectedRows.length > 0 && onBulkDelete && (
+                    <Button className="h-8 px-2 lg:px-3" onClick={() => onBulkDelete(selectedRows)} variant="ghost">Delete Selected</Button>
                 )}
             </div>
             <DataTableViewOptions table={table} />
